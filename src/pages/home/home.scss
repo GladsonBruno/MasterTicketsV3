@@ -1,0 +1,89 @@
+page-home {
+    .tickets{
+        text-align:center;
+        color: green;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .status {
+        font-weight: bold;
+        text-align: center;
+    }
+    .title {
+
+        font-weight: bold;
+       
+    }
+    .card {
+        background: hsl(0, 0%, 86%);
+        
+    }
+    .swiper-pagination.swiper-pagination-clickable.swiper-pagination-bullets{
+        margin-bottom:10px;
+    }
+    .teste1{
+        background:red;
+    }
+    .teste2{
+        background:green;
+    }
+    .slide-zoom{
+        height:100%;
+    }
+    .titleSlide{
+        margin-top:10px !important;
+        margin-bottom:10px;
+        color:#232323
+    }
+    .quantidadePreferenciais{
+        border:solid 2px #007979
+       
+    }
+    .grid{
+        margin-bottom:20px;
+    }
+    button{
+        border-radius: 15px !important
+    }
+    .quantidadeNormais{
+        border:solid 2px #007979
+    }
+    .titleTotal{
+        color:#007979
+    }
+    .contentTotal{
+        color:grey;
+    }
+    .SwipedTabs-indicatorSegment
+    {
+        -webkit-transition: 0.3s all;
+        -moz-transition:  0.3s all;
+        -o-transition:  0.3s all;
+        transition:  0.3s all;
+        transform-origin: top 0 left 0;
+        height: 1px;
+	    position: relative;
+	    top: -2px;
+	    background-color: white !important;
+    }
+    .SwipedTabs-tabs ion-segment-button
+    {
+    	border:none !important;
+    	color:gray!important;
+    	background-color:#007979!important;
+    }
+     .SwipedTabs-tabs ion-segment-button.SwipedTabs-activeTab
+    {
+        color:white !important;
+    }
+    .SwipedTabs-tabs
+    {
+    	border-bottom: solid 1px #007979  !important;
+    }
+    .item.item-block.item-md.item-toggle{
+        background: #007979
+    }
+    #labelPreferencial{
+        color:white !important;
+    }
+}

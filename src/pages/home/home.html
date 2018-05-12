@@ -1,0 +1,183 @@
+
+  <ion-header>
+      <ion-navbar color='secondary'>
+        <ion-title>
+            <ion-item no-lines >       
+                <ion-label id = 'labelPreferencial'> Preferencial</ion-label>  
+                <ion-toggle  checked="false" color="secondary" [(ngModel)] = 'validaPreferencial'></ion-toggle>
+               </ion-item> 
+        </ion-title>
+        <ion-segment  class="SwipedTabs-tabs"  >
+            <ion-segment-button *ngFor='let tab of tabs ; let i = index ' value="IngoreMe" (click)="selectTab(i)"
+            [ngClass]='{ "SwipedTabs-activeTab" : ( this.SwipedTabsSlider  && ( this.SwipedTabsSlider.getActiveIndex() === i || (  tabs.length -1 === i&& this.SwipedTabsSlider.isEnd()))) }' >
+            <ion-icon name={{tab}}></ion-icon>
+    
+            </ion-segment-button>
+          </ion-segment>
+          <div id='indicator' class="SwipedTabs-indicatorSegment" [ngStyle]="{'width.%': (100/this.tabs.length)}"></div>  
+   
+      </ion-navbar>
+     
+    </ion-header>
+
+<ion-content padding>
+
+   
+
+ 
+       
+  <ion-slides #SwipedTabsSlider  (ionSlideDrag)="animateIndicator($event)"
+  (ionSlideWillChange)="updateIndicatorPosition()"
+  (ionSlideDidChange)="updateIndicatorPosition()"
+  (pan)="updateIndicatorPosition()"
+  [pager]="false">
+     
+    <ion-slide >
+        <h2 class = 'titleSlide'>Firma e Autenticação</h2>
+        <ion-grid>
+            <ion-row>
+              <ion-col col-6 class = 'quantidadeNormais'>
+                <span class = 'titleTotal'>Normal</span> <br><span class = 'contentTotal'> {{validation}}</span>
+               </ion-col>
+               <ion-col col-6 class = 'quantidadePreferenciais'>
+                  <span class = 'titleTotal'> Preferencial</span> <br><span class = 'contentTotal'> {{validationPreferencial}}</span>
+                </ion-col>
+              
+            </ion-row>
+        </ion-grid>
+       
+              
+             
+      
+     
+      <button block ion-button  item-left (click) = 'reconhecimentoFirmaAutenticacao()' color='secondary'  [disabled]="validaStatusReconhecimentoFirma !== 'Concluído'">Retirar Senha</button>
+          
+      <ion-card [ngStyle]= "validaStatusReconhecimentoFirma === 'Aberto' && {'border':'solid 2px green'} ||
+      validaStatusReconhecimentoFirma === 'Em Atendimento' && {'border':'solid 2px red'} ||
+      validaStatusReconhecimentoFirma === 'Concluído' && {'border':'solid 2px blue'}"
+      *ngIf = 'validaStatusReconhecimentoFirma !== "Concluído"' >
+          <ion-card-header  *ngFor = 'let item of ticketAtualRecochecimentoFirma | async'  (click) = 'openModal("Firma e Autenticação", item.number,item.typeTicket)'>
+              <h1 class = 'title' [ngStyle]= "validaStatusReconhecimentoFirma === 'Aberto' && {'color':'green'} ||
+              validaStatusReconhecimentoFirma === 'Em Atendimento' && {'color':'red'} ||
+              validaStatusReconhecimentoFirma === 'Concluído' && {'color':'blue'}
+              "  >{{item.ticket}} </h1> 
+            
+            </ion-card-header>
+        <ion-card-content *ngFor = 'let item of ticketAtualRecochecimentoFirma | async' >         
+          <h3 class = 'status' [ngStyle]= "validaStatusReconhecimentoFirma === 'Aberto' && {'color':'green'} ||
+          validaStatusReconhecimentoFirma === 'Em Atendimento' && {'color':'red'} ||
+          validaStatusReconhecimentoFirma === 'Concluído' && {'color':'blue'}
+          " >{{item.status}}</h3>          
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+ 
+    <ion-slide >
+        <h2 class = 'titleSlide'>Procuração</h2>
+        <ion-grid>
+            <ion-row>
+              <ion-col col-6 class = 'quantidadeNormais'>
+                <span class = 'titleTotal'>Normal</span> <br><span class = 'contentTotal'> {{validationProcuracao}}</span>
+               </ion-col>
+               <ion-col col-6 class = 'quantidadePreferenciais'>
+                  <span class = 'titleTotal'> Preferencial</span> <br><span class = 'contentTotal'> {{validationProcuracaoPreferencial}}</span>
+                </ion-col>
+              
+            </ion-row>
+        </ion-grid>
+     
+      <button block ion-button  item-left (click)  = 'procuracao()' color='secondary'  [disabled]="validaStatusProcuracao !== 'Concluído'">Retirar Senha</button>
+
+      <ion-card  [ngStyle]= "validaStatusProcuracao === 'Aberto' && {'border':'solid 2px green'} ||
+      validaStatusProcuracao === 'Em Atendimento' && {'border':'solid 2px red'} ||
+      validaStatusProcuracao === 'Concluído' && {'border':'solid 2px blue'}
+      " *ngIf = 'validaStatusProcuracao !== "Concluído"'  >
+          <ion-card-header  *ngFor = 'let item of ticketAtualProcuracao | async' (click) = 'openModal("Procuração", item.number,item.typeTicket)'>
+              <h1 class = 'title' [ngStyle]= "validaStatusProcuracao === 'Aberto' && {'color':'green'} ||
+              validaStatusProcuracao === 'Em Atendimento' && {'color':'red'} ||
+              validaStatusProcuracao === 'Concluído' && {'color':'blue'}
+              " >{{item.ticket}} </h1> 
+            </ion-card-header>
+        <ion-card-content *ngFor = 'let item of ticketAtualProcuracao | async' >         
+          <h3 class = 'status' [ngStyle]= "validaStatusProcuracao === 'Aberto' && {'color':'green'} ||
+          validaStatusProcuracao === 'Em Atendimento' && {'color':'red'} ||
+          validaStatusProcuracao === 'Concluído' && {'color':'blue'}
+          " >{{item.status}}</h3>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+  
+    <ion-slide >
+        <h2 class = 'titleSlide'>Registro civil</h2>
+        <ion-grid>
+            <ion-row>
+              <ion-col col-6 class = 'quantidadeNormais'>
+                <span class = 'titleTotal'>Normal</span> <br><span class = 'contentTotal'> {{validationRegistroCivil}}</span>
+               </ion-col>
+               <ion-col col-6 class = 'quantidadePreferenciais'>
+                  <span class = 'titleTotal'> Preferencial</span> <br><span class = 'contentTotal'> {{validationRegistroCivilPreferencial}}</span>
+                </ion-col>
+              
+            </ion-row>
+        </ion-grid>
+      
+      <button block ion-button  item-left  (click) = ' registroCivil()' color='secondary'  [disabled]="validaStatusRegistroCivil !== 'Concluído'">Retirar Senha</button>
+
+      <ion-card  [ngStyle]= "validaStatusRegistroCivil === 'Aberto' && {'border':'solid 2px green'} ||
+      validaStatusRegistroCivil === 'Em Atendimento' && {'border':'solid 2px red'} ||
+      validaStatusRegistroCivil === 'Concluído' && {'border':'solid 2px blue'}
+      " *ngIf = 'validaStatusRegistroCivil !== "Concluído"' >
+          <ion-card-header  *ngFor = 'let item of ticketAtualRegistroCivil | async' (click) = ' openModal("Registro Civil", item.number,item.typeTicket)'>
+              <h1 class = 'title' [ngStyle]= "validaStatusRegistroCivil === 'Aberto' && {'color':'green'} ||
+              validaStatusRegistroCivil === 'Em Atendimento' && {'color':'red'} ||
+              validaStatusRegistroCivil === 'Concluído' && {'color':'blue'}
+              " >{{item.ticket}} </h1> 
+            </ion-card-header>
+        <ion-card-content *ngFor = 'let item of ticketAtualRegistroCivil | async' >         
+          <h3 class = 'status' [ngStyle]= "validaStatusRegistroCivil === 'Aberto' && {'color':'green'} ||
+          validaStatusRegistroCivil === 'Em Atendimento' && {'color':'red'} ||
+          validaStatusRegistroCivil === 'Concluído' && {'color':'blue'}
+          " >{{item.status}}</h3>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+
+    <ion-slide >
+        <h2 class = 'titleSlide'>Escritura</h2>
+        <ion-grid>
+            <ion-row>
+              <ion-col col-6 class = 'quantidadeNormais'>
+                <span class = 'titleTotal'>Normal</span> <br><span class = 'contentTotal'> {{validationEscritura}}</span>
+               </ion-col>
+               <ion-col col-6 class = 'quantidadePreferenciais'>
+                  <span class = 'titleTotal'> Preferencial</span> <br><span class = 'contentTotal'> {{validationEscrituraPreferencial}}</span>
+                </ion-col>
+              
+            </ion-row>
+        </ion-grid>
+        
+        <button block ion-button  item-left color='secondary' (click) = 'escritura()'  [disabled]="validaStatusEscritura !== 'Concluído'">Retirar Senha</button>
+
+        <ion-card  [ngStyle]= "validaStatusEscritura === 'Aberto' && {'border':'solid 2px green'} ||
+        validaStatusEscritura === 'Em Atendimento' && {'border':'solid 2px red'} ||
+        validaStatusEscritura === 'Concluído' && {'border':'solid 2px blue'}
+        " *ngIf = 'validaStatusEscritura !== "Concluído"' >
+          <ion-card-header  *ngFor = 'let item of ticketAtualEscritura | async' (click) = 'openModal("Escritura", item.number,item.typeTicket)'>
+              <h1 class = 'title' [ngStyle]= "validaStatusEscritura === 'Aberto' && {'color':'green'} ||
+              validaStatusEscritura === 'Em Atendimento' && {'color':'red'} ||
+              validaStatusEscritura === 'Concluído' && {'color':'blue'}
+              " >{{item.ticket}} </h1> 
+            </ion-card-header>
+        <ion-card-content *ngFor = 'let item of ticketAtualEscritura | async' >         
+          <h3 class = 'status' [ngStyle]= "validaStatusEscritura === 'Aberto' && {'color':'green'} ||
+          validaStatusEscritura === 'Em Atendimento' && {'color':'red'} ||
+          validaStatusEscritura === 'Concluído' && {'color':'blue'}
+          " >{{item.status}}</h3>
+        </ion-card-content>
+      </ion-card>
+     
+
+    </ion-slide>
+  
+  </ion-slides>
+</ion-content>
